@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khoá Dã Ngoại Thiên Văn Học - Khám Phá Vũ Trụ</title>
+  <link rel="stylesheet" href="./src/styles/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <header id="main-header">
+      <nav class="container">
+        <div class="logo">ASTRO CAMP</div>
+        <ul class="nav-links">
+          <li><a href="#hero">Trang Chủ</a></li>
+          <li><a href="#about">Giới Thiệu</a></li>
+          <li><a href="#activities">Hoạt Động</a></li>
+          <li><a href="#contact" class="btn-primary">Đăng Ký Ngay</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="hero">
+        <div class="hero-content container">
+          <h1 class="animate-fade-up">Khám Phá <span class="highlight">Vũ Trụ</span> Bao La</h1>
+          <p class="animate-fade-up delay-1">Trải nghiệm cắm trại và quan sát thiên văn ngay tại thành phố.</p>
+          <a href="#contact" class="btn-primary animate-fade-up delay-2">Tham Gia Ngay</a>
+        </div>
+        <div class="stars"></div>
+      </section>
+
+      <section id="about" class="container">
+        <div class="about-grid">
+          <div class="about-text">
+            <h2 class="animate-fade-up">Về Khoá Dã Ngoại</h2>
+            <p>Bạn đã bao giờ mơ ước được chạm tay vào những vì sao? Khoá dã ngoại Thiên Văn Học của chúng tôi mang đến
+              cơ hội trải nghiệm bầu trời đêm theo cách chưa từng có.</p>
+            <ul class="features-list">
+              <li>🔭 Quan sát qua kính thiên văn chuyên nghiệp</li>
+              <li>🌌 Hướng dẫn bởi chuyên gia thiên văn</li>
+              <li>🏕️ Cắm trại an toàn và tiện nghi</li>
+              <li>🔥 Lửa trại và kể chuyện về các chòm sao</li>
+            </ul>
+          </div>
+          <div class="about-image">
+            <img src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=1200&auto=format&fit=crop"
+              alt="Camping under stars">
+          </div>
+        </div>
+      </section>
+
+      <section id="activities" class="container">
+        <h2>Hoạt Động Nổi Bật</h2>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🔭</div>
+            <h3>Quan Sát Sao</h3>
+            <p>Sử dụng kính thiên văn hiện đại để ngắm nhìn Mặt Trăng, Sao Mộc, Sao Thổ và các tinh vân rực rỡ.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⛺</div>
+            <h3>Cắm Trại Đêm</h3>
+            <p>Trải nghiệm ngủ dưới bầu trời ngàn sao trong không gian an toàn, thoáng mát của công viên.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🚀</div>
+            <h3>Workshop Tên Lửa</h3>
+            <p>Học chế tạo và phóng tên lửa nước. Hoạt động thú vị dành cho mọi lứa tuổi.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="container">
+        <h2>Đăng Ký Tham Gia</h2>
+        <div class="contact-form-wrapper">
+          <form class="contact-form" name="dang-ky-da-ngoai" method="POST" data-netlify="true">
+            <div class="form-group">
+              <input type="text" name="ho-ten" placeholder="Họ và Tên" required>
+            </div>
+            <div class="form-group">
+              <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+              <input type="tel" name="so-dien-thoai" placeholder="Số Điện Thoại" required>
+            </div>
+            <div class="form-group">
+              <select name="dot-tham-gia">
+                <option value="">Chọn Ngày Tham Gia</option>
+                <option value="dot1">Đợt 1: 15/06</option>
+                <option value="dot2">Đợt 2: 22/06</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary">Gửi Đăng Ký</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 Astro Camp. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+  <script type="module" src="./src/scripts/main.js"></script>
+</body>
+
+</html>
