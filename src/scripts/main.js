@@ -2,7 +2,7 @@
    ASTRO PARK CAMP – Main JavaScript
    ===================================================== */
 
-/* ===== 1. SOLAR SYSTEM BACKGROUND ===== */
+/* ===== 1. ULTIMATE SOLAR SYSTEM BACKGROUND ===== */
 (function initSolarSystem() {
     const canvas = document.getElementById('starfield-canvas');
     if (!canvas) return;
@@ -10,14 +10,14 @@
     let W, H;
 
     const planets = [
-        { name: 'Mercury', dist: 70, size: 3, speed: 0.04, color: '#A5A5A5', angle: Math.random() * Math.PI * 2 },
-        { name: 'Venus', dist: 110, size: 7, speed: 0.015, color: '#E3BB76', angle: Math.random() * Math.PI * 2 },
-        { name: 'Earth', dist: 160, size: 8, speed: 0.01, color: '#2271B3', angle: Math.random() * Math.PI * 2 },
-        { name: 'Mars', dist: 210, size: 6, speed: 0.008, color: '#E27B58', angle: Math.random() * Math.PI * 2 },
-        { name: 'Jupiter', dist: 320, size: 18, speed: 0.004, color: '#D39C7E', angle: Math.random() * Math.PI * 2 },
-        { name: 'Saturn', dist: 420, size: 15, speed: 0.002, color: '#C5AB6E', angle: Math.random() * Math.PI * 2, hasRings: true },
-        { name: 'Uranus', dist: 500, size: 10, speed: 0.0015, color: '#BBE1E4', angle: Math.random() * Math.PI * 2 },
-        { name: 'Neptune', dist: 570, size: 10, speed: 0.001, color: '#6081FF', angle: Math.random() * Math.PI * 2 }
+        { name: 'Mercury', dist: 80, size: 4, speed: 0.035, color: '#8c8c8c', secondary: '#555', angle: Math.random() * Math.PI * 2 },
+        { name: 'Venus', dist: 120, size: 8, speed: 0.018, color: '#e3bb76', secondary: '#a17a3a', angle: Math.random() * Math.PI * 2, glow: 'rgba(227,187,118,0.3)' },
+        { name: 'Earth', dist: 175, size: 9, speed: 0.012, color: '#2271b3', secondary: '#0d2c4a', angle: Math.random() * Math.PI * 2, glow: 'rgba(34,113,179,0.4)', hasClouds: true },
+        { name: 'Mars', dist: 230, size: 7, speed: 0.009, color: '#e27b58', secondary: '#8a3a22', angle: Math.random() * Math.PI * 2, glow: 'rgba(226,123,88,0.25)' },
+        { name: 'Jupiter', dist: 350, size: 22, speed: 0.005, color: '#d39c7e', secondary: '#91614a', angle: Math.random() * Math.PI * 2, hasBands: true },
+        { name: 'Saturn', dist: 460, size: 18, speed: 0.003, color: '#c5ab6e', secondary: '#8c7744', angle: Math.random() * Math.PI * 2, hasRings: true },
+        { name: 'Uranus', dist: 550, size: 12, speed: 0.002, color: '#bbe1e4', secondary: '#7ca6a9', angle: Math.random() * Math.PI * 2, glow: 'rgba(187,225,228,0.2)' },
+        { name: 'Neptune', dist: 630, size: 12, speed: 0.0015, color: '#6081ff', secondary: '#2a41a3', angle: Math.random() * Math.PI * 2, glow: 'rgba(96,129,255,0.3)' }
     ];
 
     function resize() {
@@ -25,73 +25,116 @@
         H = canvas.height = window.innerHeight;
     }
 
+    let sunTime = 0;
     function drawSun(cx, cy) {
-        // Core Sun glow
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50);
-        grad.addColorStop(0, '#FFF5E1');
-        grad.addColorStop(0.2, '#FFD200');
-        grad.addColorStop(0.5, '#F7941E');
+        sunTime += 0.02;
+        const pulse = Math.sin(sunTime * 0.5) * 5;
+
+        // Multi-layered Sun Corona
+        for (let i = 4; i > 0; i--) {
+            const r = (50 + i * 15) + pulse;
+            const alpha = 0.15 / i;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(247, 148, 30, ${alpha})`;
+            ctx.fill();
+        }
+
+        // Sun Body
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 55);
+        grad.addColorStop(0, '#fff');
+        grad.addColorStop(0.2, '#ffd200');
+        grad.addColorStop(0.5, '#f7941e');
         grad.addColorStop(1, 'transparent');
 
         ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(cx, cy, 60, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Inner core
         ctx.shadowBlur = 40;
-        ctx.shadowColor = '#F7941E';
+        ctx.shadowColor = '#f7941e';
         ctx.beginPath();
-        ctx.arc(cx, cy, 35, 0, Math.PI * 2);
-        ctx.fillStyle = '#FFD200';
+        ctx.arc(cx, cy, 55, 0, Math.PI * 2);
         ctx.fill();
         ctx.shadowBlur = 0;
     }
 
     function drawOrbit(cx, cy, dist) {
+        ctx.save();
         ctx.beginPath();
-        ctx.ellipse(cx, cy, dist * 1.5, dist * 0.8, Math.PI / 10, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-        ctx.lineWidth = 1;
+        ctx.ellipse(cx, cy, dist * 1.5, dist * 0.8, Math.PI / 12, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.setLineDash([5, 15]);
+        ctx.lineWidth = 0.5;
         ctx.stroke();
+        ctx.restore();
     }
 
     function drawPlanet(cx, cy, p) {
         const x = Math.cos(p.angle) * p.dist * 1.5;
         const y = Math.sin(p.angle) * p.dist * 0.8;
-
-        // Tilt rotation (matching orbit)
-        const rot = Math.PI / 10;
+        const rot = Math.PI / 12;
         const finalX = cx + x * Math.cos(rot) - y * Math.sin(rot);
         const finalY = cy + x * Math.sin(rot) + y * Math.cos(rot);
 
-        // Saturn Rings
-        if (p.hasRings) {
+        // Planet Glow/Atmosphere
+        if (p.glow) {
             ctx.beginPath();
-            ctx.ellipse(finalX, finalY, p.size * 2.2, p.size * 0.8, p.angle + Math.PI / 4, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(197, 171, 110, 0.4)';
-            ctx.lineWidth = 4;
-            ctx.stroke();
+            ctx.arc(finalX, finalY, p.size * 1.8, 0, Math.PI * 2);
+            ctx.fillStyle = p.glow;
+            ctx.fill();
         }
 
-        // Planet Body
-        const planetGrad = ctx.createRadialGradient(finalX - p.size * 0.3, finalY - p.size * 0.3, 0, finalX, finalY, p.size);
+        // Saturn Rings (More Detail)
+        if (p.hasRings) {
+            ctx.save();
+            ctx.translate(finalX, finalY);
+            ctx.rotate(p.angle + Math.PI / 4);
+            // Three ring layers
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.ellipse(0, 0, p.size * (2.0 + i * 0.2), p.size * (0.6 + i * 0.1), 0, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(197, 171, 110, ${0.4 - i * 0.1})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // Planet Body with Lighting
+        const planetGrad = ctx.createRadialGradient(finalX - p.size * 0.4, finalY - p.size * 0.4, 0, finalX, finalY, p.size);
         planetGrad.addColorStop(0, p.color);
-        planetGrad.addColorStop(1, '#000');
+        planetGrad.addColorStop(0.7, p.secondary);
+        planetGrad.addColorStop(1, '#050505');
 
         ctx.beginPath();
         ctx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
         ctx.fillStyle = planetGrad;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = p.color;
         ctx.fill();
-        ctx.shadowBlur = 0;
+
+        // Special Detail: Jupiter Bands
+        if (p.hasBands) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
+            ctx.clip();
+            for (let i = -3; i <= 3; i++) {
+                ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+                ctx.fillRect(finalX - p.size, finalY + (i * p.size / 4) - 1, p.size * 2, 2);
+            }
+            ctx.restore();
+        }
+
+        // Special Detail: Earth Clouds (Simple swirl)
+        if (p.hasClouds) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.beginPath();
+            ctx.arc(finalX + p.size * 0.2, finalY - p.size * 0.2, p.size * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
         p.angle += p.speed;
     }
 
     function draw() {
-        ctx.fillStyle = '#07080f';
+        ctx.fillStyle = '#05060b';
         ctx.fillRect(0, 0, W, H);
 
         const cx = W / 2;
