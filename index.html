@@ -5,112 +5,403 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Khoá Dã Ngoại Thiên Văn Học - Khám Phá Vũ Trụ</title>
+  <title>Astro Park Camp – Trải Nghiệm Vũ Trụ Đích Thực</title>
+  <meta name="description"
+    content="Khoá dã ngoại thiên văn học đẳng cấp – Cắm trại dưới bầu trời sao, quan sát vũ trụ cùng chuyên gia, tận hưởng lều Glamping sang trọng." />
   <link rel="stylesheet" href="./src/styles/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet">
 </head>
 
 <body>
+
+  <!-- ===== CANVAS BACKGROUND ===== -->
+  <canvas id="starfield-canvas"></canvas>
+
+  <!-- ===== NEBULA BACKGROUNDS ===== -->
+  <div class="nebula nebula-left"></div>
+  <div class="nebula nebula-right"></div>
+
   <div id="app">
+
+    <!-- ===== HEADER / NAV ===== -->
     <header id="main-header">
-      <nav class="container">
-        <div class="logo">ASTRO CAMP</div>
-        <ul class="nav-links">
-          <li><a href="#hero">Trang Chủ</a></li>
-          <li><a href="#about">Giới Thiệu</a></li>
-          <li><a href="#activities">Hoạt Động</a></li>
-          <li><a href="#contact" class="btn-primary">Đăng Ký Ngay</a></li>
+      <nav class="nav-container">
+        <div class="logo">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2L16.5 9.5H24.5L18 14.5L20.5 22L14 17L7.5 22L10 14.5L3.5 9.5H11.5L14 2Z" fill="#7c3aed"
+              stroke="#a78bfa" stroke-width="0.5" />
+            <circle cx="14" cy="14" r="3" fill="#4cc9f0" />
+          </svg>
+          <span>ASTRO PARK CAMP</span>
+        </div>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#experiences">Experiences</a></li>
+          <li><a href="#accommodation">Accommodation</a></li>
+          <li><a href="#activities">Observatory</a></li>
+          <li><a href="#about">About</a></li>
         </ul>
+        <a href="#contact" class="btn-book-now" id="btn-book-now">Book Now</a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </nav>
     </header>
 
     <main>
+
+      <!-- ===== HERO SECTION ===== -->
       <section id="hero">
-        <div class="hero-content container">
-          <h1 class="animate-fade-up">Khám Phá <span class="highlight">Vũ Trụ</span> Cùng Chúng Tôi</h1>
-          <p class="animate-fade-up delay-1">Trải nghiệm cắm trại và quan sát thiên văn ngay tại thành phố.</p>
-          <a href="#contact" class="btn-primary animate-fade-up delay-2">Tham Gia Ngay</a>
-        </div>
-        <div class="stars"></div>
-      </section>
-
-      <section id="about" class="container">
-        <div class="about-grid">
-          <div class="about-text">
-            <h2 class="animate-fade-up">Về Khoá Dã Ngoại</h2>
-            <p>Bạn đã bao giờ mơ ước được chạm tay vào những vì sao? Khoá dã ngoại Thiên Văn Học của chúng tôi mang đến
-              cơ hội trải nghiệm bầu trời đêm theo cách chưa từng có.</p>
-            <ul class="features-list">
-              <li>🔭 Quan sát qua kính thiên văn chuyên nghiệp</li>
-              <li>🌌 Hướng dẫn bởi chuyên gia thiên văn</li>
-              <li>🏕️ Cắm trại an toàn và tiện nghi</li>
-              <li>🔥 Lửa trại và kể chuyện về các chòm sao</li>
-            </ul>
+        <div class="hero-inner">
+          <div class="hero-text">
+            <p class="hero-overline animate-fade-up">✦ Immersive Astronomy Camping</p>
+            <h1 class="animate-fade-up delay-1">
+              EXPERIENCE THE<br>
+              <span class="hero-highlight">UNIVERSE</span><br>
+              BEYOND.
+            </h1>
+            <p class="hero-sub animate-fade-up delay-2">Immersive Astronomy Camping in<br>Deep Space Reserves.</p>
+            <a href="#contact" class="btn-explore animate-fade-up delay-3" id="btn-explore">
+              <span>Explore Packages</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </a>
           </div>
-          <div class="about-image">
-            <img src="https://images.unsplash.com/photo-1516939884455-1445c8652f83?q=80&w=1200&auto=format&fit=crop"
-              alt="Camping under stars">
+          <div class="hero-image-wrapper animate-fade-left delay-2">
+            <div class="hero-image-glow"></div>
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1400&auto=format&fit=crop"
+              alt="Glamping dưới bầu trời sao với lều cắm trại" class="hero-img" loading="eager" />
+            <div class="hero-image-overlay"></div>
           </div>
         </div>
       </section>
 
-      <section id="activities" class="container">
-        <h2>Hoạt Động Nổi Bật</h2>
-        <div class="cards-grid">
-          <div class="card">
-            <div class="card-icon">🔭</div>
-            <h3>Quan Sát Sao</h3>
-            <p>Sử dụng kính thiên văn hiện đại để ngắm nhìn Mặt Trăng, Sao Mộc, Sao Thổ và các tinh vân rực rỡ.</p>
+      <!-- ===== EXPERIENCES (CARDS) SECTION ===== -->
+      <section id="experiences">
+        <div class="container">
+          <div class="section-header">
+            <p class="section-overline">✦ What We Offer</p>
+            <h2>Premium <span class="text-gradient">Experiences</span></h2>
+            <p class="section-sub">Khám phá những trải nghiệm độc đáo dưới bầu trời đêm đầy sao</p>
           </div>
-          <div class="card">
-            <div class="card-icon">⛺</div>
-            <h3>Cắm Trại Đêm</h3>
-            <p>Trải nghiệm ngủ dưới bầu trời ngàn sao trong không gian an toàn, thoáng mát của công viên.</p>
-          </div>
-          <div class="card">
-            <div class="card-icon">🚀</div>
-            <h3>Workshop Tên Lửa</h3>
-            <p>Học chế tạo và phóng tên lửa nước. Hoạt động thú vị dành cho mọi lứa tuổi.</p>
+          <div class="cards-grid" id="experiences-grid">
+            <div class="exp-card animate-fade-up">
+              <div class="exp-card-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=600&auto=format&fit=crop"
+                  alt="Premium Stargazing" loading="lazy" />
+                <div class="exp-card-img-overlay"></div>
+              </div>
+              <div class="exp-card-body">
+                <h3>PREMIUM STARGAZING</h3>
+                <p>Access professional-grade telescopes and guided tours with expert astronomers.</p>
+                <a href="#contact" class="btn-learn-more">Learn More</a>
+              </div>
+            </div>
+            <div class="exp-card animate-fade-up delay-1">
+              <div class="exp-card-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?q=80&w=600&auto=format&fit=crop"
+                  alt="Luxury Space Pods" loading="lazy" />
+                <div class="exp-card-img-overlay"></div>
+              </div>
+              <div class="exp-card-body">
+                <h3>LUXURY SPACE PODS</h3>
+                <p>Stay in temperature-controlled pods with panoramic views of the cosmos.</p>
+                <a href="#contact" class="btn-learn-more">Learn More</a>
+              </div>
+            </div>
+            <div class="exp-card animate-fade-up delay-2">
+              <div class="exp-card-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=600&auto=format&fit=crop"
+                  alt="Nebula Night Hikes" loading="lazy" />
+                <div class="exp-card-img-overlay"></div>
+              </div>
+              <div class="exp-card-body">
+                <h3>NEBULA NIGHT HIKES</h3>
+                <p>Explore ancient landscapes illuminated by starlight and guided by experts.</p>
+                <a href="#contact" class="btn-learn-more">Learn More</a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="contact" class="container">
-        <h2>Đăng Ký Tham Gia</h2>
-        <div class="contact-form-wrapper">
-          <form class="contact-form" name="dang-ky-da-ngoai" method="POST" data-netlify="true">
-            <div class="form-group">
-              <input type="text" name="ho-ten" placeholder="Họ và Tên" required>
+      <!-- ===== ABOUT / FEATURES SECTION ===== -->
+      <section id="about">
+        <div class="container">
+          <div class="about-grid">
+            <div class="about-image-side animate-fade-right">
+              <div class="about-img-glow"></div>
+              <img src="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=800&auto=format&fit=crop"
+                alt="Kính thiên văn quan sát bầu trời đêm" class="about-img" loading="lazy" />
             </div>
-            <div class="form-group">
-              <input type="email" name="email" placeholder="Email" required>
+            <div class="about-text-side animate-fade-up">
+              <p class="section-overline">✦ Về Chúng Tôi</p>
+              <h2 class="about-h2">Nơi Con Người Chạm<br><span class="text-gradient">Tới Vì Sao</span></h2>
+              <p>Astronomy Park Camp mang đến trải nghiệm glamping thiên văn học độc nhất vô nhị tại Việt Nam. Chúng tôi
+                kết hợp sự tiện nghi sang trọng với vẻ đẹp bí ẩn của vũ trụ.</p>
+              <div class="features-list">
+                <div class="feature-item">
+                  <div class="feature-icon">🔭</div>
+                  <div>
+                    <h4>Kính Thiên Văn Chuyên Nghiệp</h4>
+                    <p>Hệ thống kính hiện đại với độ phóng đại cao, nhìn thấy Sao Thổ, Sao Mộc rõ nét</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div class="feature-icon">🌌</div>
+                  <div>
+                    <h4>Chuyên Gia Thiên Văn</h4>
+                    <p>Được dẫn dắt bởi các nhà thiên văn học có chứng chỉ quốc tế</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div class="feature-icon">🏕️</div>
+                  <div>
+                    <h4>Lều Glamping Sang Trọng</h4>
+                    <p>Lều hình cầu với mái kính trong suốt, ngắm sao trực tiếp từ giường ngủ</p>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div class="feature-icon">🔥</div>
+                  <div>
+                    <h4>Lửa Trại & Kể Chuyện Sao</h4>
+                    <p>Tối lửa trại ấm cúng với những câu chuyện về huyền thoại các chòm sao</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <input type="tel" name="so-dien-thoai" placeholder="Số Điện Thoại" required>
-            </div>
-            <div class="form-group">
-              <select name="dot-tham-gia">
-                <option value="">Chọn Ngày Tham Gia</option>
-                <option value="dot1">Đợt 1: 15/06</option>
-                <option value="dot2">Đợt 2: 22/06</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-primary">Gửi Đăng Ký</button>
-          </form>
+          </div>
         </div>
       </section>
+
+      <!-- ===== ACCOMMODATION SECTION ===== -->
+      <section id="accommodation">
+        <div class="container">
+          <div class="section-header">
+            <p class="section-overline">✦ Nơi Nghỉ Ngơi</p>
+            <h2>Luxury <span class="text-gradient">Accommodation</span></h2>
+          </div>
+          <div class="accom-grid">
+            <div class="accom-card large animate-fade-up">
+              <img src="https://images.unsplash.com/photo-1563299796-17596ed6b017?q=80&w=900&auto=format&fit=crop"
+                alt="Glamping Pod" loading="lazy" />
+              <div class="accom-overlay">
+                <h3>Galaxy Dome Pod</h3>
+                <p>Ngủ dưới mái kính 360° nhìn thẳng lên bầu trời sao</p>
+                <span class="price-tag">từ 1,890,000 VNĐ / đêm</span>
+              </div>
+            </div>
+            <div class="accom-card animate-fade-up delay-1">
+              <img src="https://images.unsplash.com/photo-1478827536114-da961b7f86d2?q=80&w=600&auto=format&fit=crop"
+                alt="Lều cắm trại cao cấp" loading="lazy" />
+              <div class="accom-overlay">
+                <h3>Nebula Tent</h3>
+                <p>Lều cao cấp với tiện nghi đầy đủ</p>
+                <span class="price-tag">từ 890,000 VNĐ / đêm</span>
+              </div>
+            </div>
+            <div class="accom-card animate-fade-up delay-2">
+              <img src="https://images.unsplash.com/photo-1508193638397-1c4234db14d8?q=80&w=600&auto=format&fit=crop"
+                alt="Lều trời đêm" loading="lazy" />
+              <div class="accom-overlay">
+                <h3>Stardust Cabin</h3>
+                <p>Cabin gỗ ấm cúng với view núi rừng</p>
+                <span class="price-tag">từ 1,290,000 VNĐ / đêm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== TESTIMONIAL SECTION ===== -->
+      <section id="testimonials">
+        <div class="testimonial-bg">
+          <canvas id="orbit-canvas"></canvas>
+        </div>
+        <div class="container">
+          <div class="section-header">
+            <p class="section-overline">✦ Khách Hàng Nói Gì</p>
+            <h2>Real <span class="text-gradient">Stories</span></h2>
+          </div>
+          <div class="testimonials-wrapper">
+            <div class="testimonial-card active" id="t1">
+              <div class="testimonial-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop&crop=face"
+                  alt="Khách hàng" loading="lazy" />
+              </div>
+              <blockquote>"Tôi đã đến và hoàn toàn bị cuốn hút bởi trải nghiệm này. Ngắm Sao Thổ qua kính thiên văn lần
+                đầu tiên là khoảnh khắc đáng nhớ nhất cuộc đời tôi!"</blockquote>
+              <cite>Nguyễn Minh Khoa, TP. Hồ Chí Minh</cite>
+              <div class="stars-rating">★★★★★</div>
+            </div>
+            <div class="testimonial-card" id="t2">
+              <div class="testimonial-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop&crop=face"
+                  alt="Khách hàng" loading="lazy" />
+              </div>
+              <blockquote>"The glamping experience exceeded all expectations. Sleeping under a dome and waking up to the
+                Milky Way is something I'll never forget. Highly recommend!"</blockquote>
+              <cite>Trần Thị Lan Anh, Hà Nội</cite>
+              <div class="stars-rating">★★★★★</div>
+            </div>
+            <div class="testimonial-card" id="t3">
+              <div class="testimonial-avatar">
+                <img
+                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop&crop=face"
+                  alt="Khách hàng" loading="lazy" />
+              </div>
+              <blockquote>"Cả gia đình tôi đều mê chuyến đi này. Các bé được học về thiên văn học một cách vui vẻ và ấn
+                tượng. Chắc chắn sẽ quay lại mùa hè sau!"</blockquote>
+              <cite>Phạm Quốc Hùng, Đà Nẵng</cite>
+              <div class="stars-rating">★★★★★</div>
+            </div>
+          </div>
+          <div class="testimonial-dots">
+            <button class="dot active" data-idx="0" aria-label="Đánh giá 1"></button>
+            <button class="dot" data-idx="1" aria-label="Đánh giá 2"></button>
+            <button class="dot" data-idx="2" aria-label="Đánh giá 3"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CONTACT / BOOKING SECTION ===== -->
+      <section id="contact">
+        <div class="container">
+          <div class="contact-grid">
+            <div class="contact-info animate-fade-right">
+              <p class="section-overline">✦ Đặt Chỗ Ngay</p>
+              <h2 class="contact-h2">Sẵn Sàng Cho<br><span class="text-gradient">Cuộc Phiêu Lưu?</span></h2>
+              <p>Điền thông tin và chúng tôi sẽ liên hệ trong vòng 24 giờ để xác nhận chỗ của bạn.</p>
+              <div class="contact-details">
+                <div class="contact-detail-item">
+                  <span class="contact-icon">📍</span>
+                  <span>Công Viên Thiên Văn, Bình Dương, Việt Nam</span>
+                </div>
+                <div class="contact-detail-item">
+                  <span class="contact-icon">📞</span>
+                  <span>+84 (0) 123 456 789</span>
+                </div>
+                <div class="contact-detail-item">
+                  <span class="contact-icon">✉️</span>
+                  <span>hello@astroparkcamp.vn</span>
+                </div>
+              </div>
+            </div>
+            <div class="contact-form-wrapper animate-fade-up">
+              <form class="contact-form" name="dang-ky-da-ngoai" method="POST" data-netlify="true" id="booking-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="ho-ten">Họ và Tên</label>
+                    <input type="text" id="ho-ten" name="ho-ten" placeholder="Nguyễn Văn A" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="so-dien-thoai">Số Điện Thoại</label>
+                    <input type="tel" id="so-dien-thoai" name="so-dien-thoai" placeholder="0912 345 678" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="loai-trai-nghiem">Loại Trải Nghiệm</label>
+                    <select id="loai-trai-nghiem" name="loai-trai-nghiem">
+                      <option value="">Chọn gói...</option>
+                      <option value="stargazing">Premium Stargazing</option>
+                      <option value="pod">Luxury Space Pod</option>
+                      <option value="hike">Nebula Night Hike</option>
+                      <option value="combo">Combo Full Experience</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="dot-tham-gia">Ngày Tham Gia</label>
+                    <select id="dot-tham-gia" name="dot-tham-gia">
+                      <option value="">Chọn đợt...</option>
+                      <option value="dot1">Đợt 1: 15/06/2025</option>
+                      <option value="dot2">Đợt 2: 22/06/2025</option>
+                      <option value="dot3">Đợt 3: 05/07/2025</option>
+                      <option value="dot4">Đợt 4: 19/07/2025</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="ghi-chu">Ghi Chú (tùy chọn)</label>
+                  <textarea id="ghi-chu" name="ghi-chu" placeholder="Số lượng người tham gia, yêu cầu đặc biệt..."
+                    rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit" id="btn-submit">
+                  <span>Gửi Đăng Ký</span>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M2 9h14M9 3l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </main>
 
-    <footer>
-      <div class="container">
-        <p>&copy; 2024 Astro Camp. All rights reserved.</p>
+    <!-- ===== FOOTER ===== -->
+    <footer id="main-footer">
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <div class="logo footer-logo">
+            <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L16.5 9.5H24.5L18 14.5L20.5 22L14 17L7.5 22L10 14.5L3.5 9.5H11.5L14 2Z" fill="#7c3aed"
+                stroke="#a78bfa" stroke-width="0.5" />
+              <circle cx="14" cy="14" r="3" fill="#4cc9f0" />
+            </svg>
+            <span>ASTRO PARK CAMP</span>
+          </div>
+          <p class="footer-tagline">Nơi vũ trụ chạm vào trái tim bạn.</p>
+        </div>
+        <nav class="footer-links">
+          <a href="#" id="footer-privacy">Privacy Policy</a>
+          <a href="#" id="footer-terms">Terms of Service</a>
+          <a href="#contact" id="footer-contact">Contact</a>
+        </nav>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" id="social-fb" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+            </svg>
+          </a>
+          <a href="#" class="social-icon" id="social-ig" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor"
+                stroke-width="2" />
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" fill="currentColor" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+          </a>
+          <a href="#" class="social-icon" id="social-yt" aria-label="YouTube">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#090a0f" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Astro Park Camp. All rights reserved. Made with ✦ under the stars.</p>
       </div>
     </footer>
+
   </div>
+
   <script type="module" src="./src/scripts/main.js"></script>
 </body>
 
