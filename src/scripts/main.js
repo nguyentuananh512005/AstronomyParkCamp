@@ -2,112 +2,109 @@
    ASTRO PARK CAMP – Main JavaScript
    ===================================================== */
 
-/* ===== 1. STARFIELD CANVAS ===== */
-(function initStarfield() {
+/* ===== 1. SOLAR SYSTEM BACKGROUND ===== */
+(function initSolarSystem() {
     const canvas = document.getElementById('starfield-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let W, H, stars = [], meteors = [];
+    let W, H;
+
+    const planets = [
+        { name: 'Mercury', dist: 70, size: 3, speed: 0.04, color: '#A5A5A5', angle: Math.random() * Math.PI * 2 },
+        { name: 'Venus', dist: 110, size: 7, speed: 0.015, color: '#E3BB76', angle: Math.random() * Math.PI * 2 },
+        { name: 'Earth', dist: 160, size: 8, speed: 0.01, color: '#2271B3', angle: Math.random() * Math.PI * 2 },
+        { name: 'Mars', dist: 210, size: 6, speed: 0.008, color: '#E27B58', angle: Math.random() * Math.PI * 2 },
+        { name: 'Jupiter', dist: 320, size: 18, speed: 0.004, color: '#D39C7E', angle: Math.random() * Math.PI * 2 },
+        { name: 'Saturn', dist: 420, size: 15, speed: 0.002, color: '#C5AB6E', angle: Math.random() * Math.PI * 2, hasRings: true },
+        { name: 'Uranus', dist: 500, size: 10, speed: 0.0015, color: '#BBE1E4', angle: Math.random() * Math.PI * 2 },
+        { name: 'Neptune', dist: 570, size: 10, speed: 0.001, color: '#6081FF', angle: Math.random() * Math.PI * 2 }
+    ];
 
     function resize() {
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
-        buildStars();
     }
 
-    function buildStars() {
-        stars = [];
-        const count = Math.floor((W * H) / 4500);
-        for (let i = 0; i < count; i++) {
-            const size = Math.random() * 2 + 0.3;
-            stars.push({
-                x: Math.random() * W,
-                y: Math.random() * H,
-                size,
-                opacity: Math.random() * 0.7 + 0.2,
-                speed: Math.random() * 0.004 + 0.002,
-                phase: Math.random() * Math.PI * 2,
-                color: Math.random() > 0.85 ? '#a78bfa' : (Math.random() > 0.7 ? '#4cc9f0' : '#ffffff'),
-            });
-        }
+    function drawSun(cx, cy) {
+        // Core Sun glow
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 50);
+        grad.addColorStop(0, '#FFF5E1');
+        grad.addColorStop(0.2, '#FFD200');
+        grad.addColorStop(0.5, '#F7941E');
+        grad.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 60, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Inner core
+        ctx.shadowBlur = 40;
+        ctx.shadowColor = '#F7941E';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 35, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFD200';
+        ctx.fill();
+        ctx.shadowBlur = 0;
     }
 
-    function createMeteor() {
-        const x = Math.random() * W;
-        const y = Math.random() * (H / 2);
-        const length = Math.random() * 100 + 50;
-        const angle = Math.PI / 4; // 45 degrees
-        meteors.push({
-            x, y,
-            targetX: x + length * Math.cos(angle + Math.PI),
-            targetY: y + length * Math.sin(angle + Math.PI),
-            life: 1.0,
-            speed: Math.random() * 5 + 5
-        });
+    function drawOrbit(cx, cy, dist) {
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, dist * 1.5, dist * 0.8, Math.PI / 10, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
     }
 
-    function updateMeteors() {
-        if (Math.random() < 0.005) { // Chance per frame to spawn meteor
-            createMeteor();
-        }
+    function drawPlanet(cx, cy, p) {
+        const x = Math.cos(p.angle) * p.dist * 1.5;
+        const y = Math.sin(p.angle) * p.dist * 0.8;
 
-        for (let i = meteors.length - 1; i >= 0; i--) {
-            const m = meteors[i];
-            m.life -= 0.015;
-            m.x += m.speed;
-            m.y += m.speed;
-            if (m.life <= 0) {
-                meteors.splice(i, 1);
-            }
-        }
-    }
+        // Tilt rotation (matching orbit)
+        const rot = Math.PI / 10;
+        const finalX = cx + x * Math.cos(rot) - y * Math.sin(rot);
+        const finalY = cy + x * Math.sin(rot) + y * Math.cos(rot);
 
-    function drawMeteors() {
-        meteors.forEach(m => {
+        // Saturn Rings
+        if (p.hasRings) {
             ctx.beginPath();
-            const grad = ctx.createLinearGradient(m.x, m.y, m.x - 40, m.y - 40);
-            grad.addColorStop(0, `rgba(255, 255, 255, ${m.life})`);
-            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.moveTo(m.x, m.y);
-            ctx.lineTo(m.x - 40, m.y - 40);
+            ctx.ellipse(finalX, finalY, p.size * 2.2, p.size * 0.8, p.angle + Math.PI / 4, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(197, 171, 110, 0.4)';
+            ctx.lineWidth = 4;
             ctx.stroke();
+        }
 
-            // Glow head
-            ctx.beginPath();
-            ctx.arc(m.x, m.y, 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${m.life})`;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'white';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        });
+        // Planet Body
+        const planetGrad = ctx.createRadialGradient(finalX - p.size * 0.3, finalY - p.size * 0.3, 0, finalX, finalY, p.size);
+        planetGrad.addColorStop(0, p.color);
+        planetGrad.addColorStop(1, '#000');
+
+        ctx.beginPath();
+        ctx.arc(finalX, finalY, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = planetGrad;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        p.angle += p.speed;
     }
 
-    let raf;
-    let t = 0;
     function draw() {
-        ctx.clearRect(0, 0, W, H);
-        t += 0.01;
+        ctx.fillStyle = '#07080f';
+        ctx.fillRect(0, 0, W, H);
 
-        // Stars
-        stars.forEach(s => {
-            const flicker = s.opacity + Math.sin(t * s.speed * 100 + s.phase) * 0.25;
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-            ctx.fillStyle = s.color;
-            ctx.globalAlpha = Math.max(0, Math.min(1, flicker));
-            ctx.fill();
+        const cx = W / 2;
+        const cy = H / 2;
+
+        drawSun(cx, cy);
+
+        planets.forEach(p => {
+            drawOrbit(cx, cy, p.dist);
+            drawPlanet(cx, cy, p);
         });
-        ctx.globalAlpha = 1;
 
-        // Meteors
-        updateMeteors();
-        drawMeteors();
-
-        raf = requestAnimationFrame(draw);
+        requestAnimationFrame(draw);
     }
 
     window.addEventListener('resize', resize);
