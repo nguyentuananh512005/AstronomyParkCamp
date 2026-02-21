@@ -377,11 +377,11 @@ body {
 }
 
 .view-3D #solar-system {
-    transform: rotateX(84deg) translateY(-8%) translateX(10%);
+    transform: rotateX(75deg) translateY(-5%) translateX(5%);
 }
 
 .view-3D #sun {
-    transform: rotateX(-84deg);
+    transform: rotateX(-75deg);
 }
 
 .view-3D .ring {
@@ -456,14 +456,9 @@ body {
     font-size: 40%;
 }
 
-.zoom-close .orbit,
-.zoom-close .pos,
-.zoom-close .planet,
-.zoom-close .satelite,
-.zoom-close .ring {
-    animation-play-state: paused !important;
-    animation-duration: 0s !important;
-    animation: none !important;
+.zoom-close .pos {
+    left: 100% !important;
+    top: 50% !important;
 }
 
 .zoom-close.view-2D .planet,
@@ -472,11 +467,11 @@ body {
 }
 
 .zoom-close.view-3D .planet {
-    transform: rotateX(-90deg);
+    transform: rotateX(-75deg);
 }
 
 .zoom-close.view-3D .moon {
-    transform: rotateX(90deg);
+    transform: rotateX(75deg);
 }
 
 .zoom-close .pos {
