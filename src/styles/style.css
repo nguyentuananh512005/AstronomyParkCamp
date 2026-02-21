@@ -79,7 +79,9 @@ img {
   position: relative;
   z-index: 10;
   pointer-events: none;
-  /* Allow interaction with background if needed, but usually we want interaction on app */
+  opacity: 0.96;
+  /* Subtle transparency to see background */
+  transition: opacity 0.5s ease;
 }
 
 #app>* {
@@ -384,13 +386,19 @@ p {
   margin: 0 auto;
   padding: 3rem 1.5rem;
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 1fr 1.1fr;
   align-items: center;
-  gap: 3rem;
+  gap: 4rem;
 }
 
 .hero-text {
-  z-index: 2;
+  z-index: 10;
+  background: rgba(7, 8, 15, 0.3);
+  padding: 2.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(124, 58, 237, 0.15);
 }
 
 .hero-overline {
@@ -478,6 +486,12 @@ h1 .hero-highlight {
   position: relative;
   border-radius: var(--radius-lg);
   overflow: hidden;
+  max-width: 520px;
+  /* Smaller image to show more background */
+  margin-left: auto;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+  -webkit-mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
 }
 
 .hero-image-glow {
