@@ -18,8 +18,28 @@
 
 <body>
 
-  <!-- ===== CANVAS BACKGROUND ===== -->
-  <canvas id="starfield-canvas"></canvas>
+  <!-- ===== SOLAR SYSTEM BACKGROUND (Anime.js Powered) ===== -->
+  <div id="solar-system-container">
+    <div class="solar-system">
+      <div class="sun"></div>
+      <!-- Planets will be injected via JS for cleaner HTML -->
+    </div>
+  </div>
+
+  <!-- Planet Navigation UI -->
+  <nav class="planet-nav">
+    <button data-planet="mercury">Mercury</button>
+    <button data-planet="venus">Venus</button>
+    <button data-planet="earth">Earth</button>
+    <button data-planet="mars">Mars</button>
+    <button data-planet="jupiter">Jupiter</button>
+    <button data-planet="saturn">Saturn</button>
+    <button data-planet="uranus">Uranus</button>
+    <button data-planet="neptune">Neptune</button>
+    <button data-planet="sun" class="active">Systems</button>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
 
   <!-- ===== NEBULA BACKGROUNDS ===== -->
   <div class="nebula nebula-left"></div>

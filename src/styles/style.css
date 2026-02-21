@@ -74,15 +74,119 @@ img {
   max-width: 100%;
 }
 
-/* ----- Starfield Canvas ----- */
-#starfield-canvas {
+/* ----- 3D Solar System Background ----- */
+#solar-system-container {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  background: #05060b;
+  overflow: hidden;
+  perspective: 1500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.solar-system {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(75deg) rotateY(0deg);
+  transition: transform 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+.sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #fff 0%, #ffd200 40%, #f7941e 100%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(-75deg);
+  box-shadow: 0 0 60px #f7941e, 0 0 100px rgba(247, 148, 30, 0.4);
+  z-index: 10;
+}
+
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px border lightgray;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.planet-container {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -2;
-  pointer-events: none;
+}
+
+.planet {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(-75deg);
+  box-shadow: inset -4px -4px 10px rgba(0, 0, 0, 0.8);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.planet-nav {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 1001;
+}
+
+.planet-nav button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s;
+  text-align: right;
+}
+
+.planet-nav button:hover,
+.planet-nav button.active {
+  background: var(--purple-main);
+  color: #fff;
+  border-color: var(--purple-light);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
+}
+
+/* Specific Planets Styles */
+.saturn-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240%;
+  height: 40%;
+  border: 4px solid rgba(197, 171, 110, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(0deg);
 }
 
 /* ----- Nebula Side Decorations ----- */
