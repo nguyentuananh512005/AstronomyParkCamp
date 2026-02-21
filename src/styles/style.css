@@ -81,10 +81,11 @@ img {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #0a0a1a radial-gradient(ellipse at center, #1a0533 0%, #05060b 60%, #000 100%);
+  background: radial-gradient(ellipse at 50% 40%, #12062a 0%, #060612 50%, #000 100%);
   z-index: -2;
   overflow: hidden;
-  perspective: 1000px;
+  perspective: 1800px;
+  perspective-origin: 50% 30%;
 }
 
 #galaxy {
@@ -102,7 +103,7 @@ img {
   width: 0;
   height: 0;
   transform-style: preserve-3d;
-  transform: rotateX(75deg) rotateZ(0deg);
+  transform: rotateX(70deg) rotateZ(0deg);
 }
 
 /* SUN */
@@ -204,114 +205,180 @@ img {
   }
 }
 
-/* PLANETS */
+/* ===== PLANETS - True 3D Sphere Style ===== */
 .planet {
   position: absolute;
   border-radius: 50%;
   cursor: pointer;
-  transition: box-shadow 0.3s;
+  transition: filter 0.3s, box-shadow 0.3s;
+  /* Base sphere shadow overlay - creates the dark side */
 }
 
+/* Shared lighting: specular highlight top-left, dark shadow bottom-right */
+.planet::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  /* Dark terminator (night side) */
+  background: radial-gradient(circle at 68% 68%, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 45%, transparent 65%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Specular hihglight (shiny hotspot from sun light) */
+.planet::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  /* Bright specular dot top-left */
+  background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.15) 25%, transparent 55%);
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---- Mercury: rocky grey ---- */
 .mercury {
   top: -4px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 8px;
   height: 8px;
-  background: radial-gradient(circle at 35% 35%, #c2c2c2, #666);
+  background:
+    radial-gradient(circle at 30% 30%, #d8d8d8 0%, #a8a8a8 40%, #555 100%);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+    0 0 6px rgba(180, 180, 180, 0.2);
 }
 
+/* ---- Venus: thick yellow atmosphere ---- */
 .venus {
   top: -11px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 22px;
   height: 22px;
-  background: radial-gradient(circle at 35% 35%, #f0d898, #b8832a);
+  background:
+    radial-gradient(circle at 38% 32%, #fffbe0 0%, #f0d070 30%, #c49020 70%, #8c6010 100%);
+  box-shadow:
+    inset 2px 2px 8px rgba(255, 255, 200, 0.4),
+    0 0 14px rgba(240, 200, 80, 0.4);
 }
 
+/* ---- Earth: blue oceans, green land ---- */
 .earth {
   top: -12px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 24px;
   height: 24px;
-  background: radial-gradient(circle at 35% 35%, #4fc3f7 30%, #1565c0 60%, #2e7d32 100%);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 18%),
+    radial-gradient(circle at 38% 35%, #5dc8f5 0%, #1a6fc8 35%, #174ea6 55%, #0e3060 80%, #0a1f42 100%);
+  box-shadow:
+    inset 2px 2px 8px rgba(100, 200, 255, 0.5),
+    0 0 18px rgba(30, 120, 255, 0.35);
 }
 
+/* ---- Moon: grey rocky ---- */
 .moon {
   top: -4px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 8px;
   height: 8px;
-  background: radial-gradient(circle at 35% 35%, #bbb, #777);
+  background:
+    radial-gradient(circle at 32% 30%, #d5d5d5 0%, #aaa 45%, #666 100%);
+  box-shadow: 0 0 4px rgba(200, 200, 200, 0.15);
 }
 
+/* ---- Mars: red desert ---- */
 .mars {
   top: -9px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 18px;
   height: 18px;
-  background: radial-gradient(circle at 35% 35%, #f4785f, #b03a1c);
+  background:
+    radial-gradient(circle at 36% 32%, #f78870 0%, #d85030 40%, #962010 75%, #5a1008 100%);
+  box-shadow:
+    inset 2px 2px 6px rgba(255, 150, 100, 0.4),
+    0 0 12px rgba(200, 60, 20, 0.3);
 }
 
+/* ---- Jupiter: gas giant with bands ---- */
 .jupiter {
   top: -35px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 70px;
   height: 70px;
-  background: radial-gradient(circle at 40% 40%, #e0c090 20%, #c8a060 50%, #9e7040 100%);
-  box-shadow: inset -8px -8px 20px rgba(0, 0, 0, 0.6);
+  background:
+    radial-gradient(circle at 38% 34%, #f0ddb0 0%, #d4aa60 30%, #b88030 60%, #7a5020 100%);
+  box-shadow:
+    inset 3px 3px 15px rgba(255, 220, 160, 0.5),
+    0 0 25px rgba(200, 150, 60, 0.3);
+  overflow: hidden;
 }
 
+/* Jupiter stripes overlaid */
+.jupiter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(180, 110, 40, 0.4) 0px, rgba(180, 110, 40, 0.4) 5px,
+      transparent 5px, transparent 10px,
+      rgba(100, 60, 20, 0.3) 10px, rgba(100, 60, 20, 0.3) 14px,
+      transparent 14px, transparent 20px),
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.4) 0%, transparent 40%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---- Saturn: warm gold ---- */
 .saturn {
   top: -26px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 52px;
   height: 52px;
-  background: radial-gradient(circle at 35% 35%, #f0d090, #d4a844);
-  box-shadow: inset -6px -6px 15px rgba(0, 0, 0, 0.6);
+  background:
+    radial-gradient(circle at 36% 32%, #ffe8a0 0%, #e0c060 30%, #c09030 65%, #806010 100%);
+  box-shadow:
+    inset 3px 3px 12px rgba(255, 240, 160, 0.5),
+    0 0 20px rgba(220, 180, 60, 0.3);
 }
 
+/* ---- Uranus: icy blue-green ---- */
 .uranus {
   top: -18px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 36px;
   height: 36px;
-  background: radial-gradient(circle at 35% 35%, #c2f0f5, #4dd0e1);
+  background:
+    radial-gradient(circle at 35% 30%, #e8fafb 0%, #90e0e8 30%, #38b8c8 65%, #1a7080 100%);
+  box-shadow:
+    inset 2px 2px 10px rgba(160, 240, 250, 0.5),
+    0 0 16px rgba(60, 200, 220, 0.3);
 }
 
+/* ---- Neptune: deep blue ---- */
 .neptune {
   top: -18px;
   left: 50%;
   transform: translate(-50%, 0);
   width: 36px;
   height: 36px;
-  background: radial-gradient(circle at 35% 35%, #7fa8ff, #3455d4);
-}
-
-/* Jupiter bands */
-.jupiter::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: repeating-linear-gradient(0deg, transparent, transparent 7px, rgba(0, 0, 0, 0.15) 7px, rgba(0, 0, 0, 0.15) 9px);
-}
-
-/* Shadow on all planets */
-.planet::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 65% 65%, rgba(0, 0, 0, 0.7) 0%, transparent 65%);
-  z-index: 1;
+  background:
+    radial-gradient(circle at 35% 30%, #a0c0ff 0%, #5080e0 30%, #2040b8 65%, #0a1870 100%);
+  box-shadow:
+    inset 2px 2px 10px rgba(120, 160, 255, 0.5),
+    0 0 20px rgba(40, 80, 220, 0.4);
 }
 
 /* SATURN & URANUS RINGS */
