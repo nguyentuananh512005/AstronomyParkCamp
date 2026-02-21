@@ -152,10 +152,10 @@ body {
     overflow: hidden;
     width: 100%;
     height: 100%;
-    background-position: center 50%;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: radial-gradient(circle at 60% 45%, #1a1a3a 0%, #08090a 70%);
+    background-image: radial-gradient(circle at center, #1a1a3a 0%, #08090a 80%);
 }
 
 #galaxy {
@@ -377,7 +377,7 @@ body {
 }
 
 .view-3D #solar-system {
-    transform: rotateX(75deg) translateY(-5%) translateX(5%);
+    transform: rotateX(75deg);
 }
 
 .view-3D #sun {

@@ -385,20 +385,23 @@ p {
   max-width: var(--container);
   margin: 0 auto;
   padding: 3rem 1.5rem;
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  align-items: center;
-  gap: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Move content down to keep top/center clear */
+  align-items: flex-start;
+  min-height: 80vh;
 }
 
 .hero-text {
   z-index: 10;
-  background: rgba(7, 8, 15, 0.3);
-  padding: 2.5rem;
-  border-radius: 20px;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(124, 58, 237, 0.15);
+  background: rgba(7, 8, 15, 0.2);
+  /* Even more transparent */
+  padding: 1.5rem;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(124, 58, 237, 0.1);
 }
 
 .hero-overline {
@@ -483,15 +486,8 @@ h1 .hero-highlight {
 
 /* Hero Image */
 .hero-image-wrapper {
-  position: relative;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  max-width: 520px;
-  /* Smaller image to show more background */
-  margin-left: auto;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-  -webkit-mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
-  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+  display: none;
+  /* Hide hero image as requested to show FULL solar system without covers */
 }
 
 .hero-image-glow {
@@ -1243,6 +1239,15 @@ select {
 .animate-fade-left.visible {
   opacity: 1;
   transform: translateX(0);
+}
+
+.animate-fade-left.view-3D #solar-system {
+  transform: rotateX(75deg);
+  /* Centered and standard tilt */
+}
+
+.view-3D #sun {
+  transform: rotateX(-75deg);
 }
 
 .delay-1 {
