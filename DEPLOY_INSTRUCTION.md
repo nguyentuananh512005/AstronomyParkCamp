@@ -1,27 +1,27 @@
-# Hướng Dẫn Đưa Website Lên Internet (Miễn Phí & Đơn Giản Nhất)
+# Hướng Dẫn Đưa Website Lên Internet (Phiên Bản Premium UI)
 
-Để đưa website của bạn lên mạng để ai cũng có thể truy cập, cách dễ nhất là sử dụng **Netlify Drop**. Bạn không cần biết lập trình server hay cài đặt phức tạp.
+## 📌 Cập nhật ngày 21/02/2026
+Giao diện đã được nâng cấp lên phiên bản **Premium Space UI** với các hiệu ứng:
+- Bầu trời sao động (Starfield Canvas).
+- Quỹ đạo hành tinh (Orbit Animation).
+- Thiết kế kính mờ (Glassmorphism).
+- Hiệu ứng tinh vân (Nebula effects).
 
-## Bước 1: Chuẩn bị thư mục Web (Đã làm xong)
-Chúng tôi đã chạy lệnh "Build" để tạo ra phiên bản website hoàn chỉnh.
-Tất cả mã nguồn web của bạn đang nằm trong thư mục:
-`C:\Users\Admin\Desktop\AstronomyParkCamp\dist`
+## ✅ Cách Triển Khai (Deployment)
 
-*(Tôi đã mở sẵn thư mục này cho bạn)*
+### Lựa chọn 1: Triển khai tự động (Khuyến nghị)
+Website đã được đẩy lên GitHub tại: [https://github.com/nguyentuananh512005/AstronomyParkCamp.git](https://github.com/nguyentuananh512005/AstronomyParkCamp.git)
 
-## Bước 2: Truy cập Netlify Drop
-1. Mở trình duyệt web và truy cập vào địa chỉ: **[https://app.netlify.com/drop](https://app.netlify.com/drop)**
-2. Bạn sẽ thấy một ô có chữ **"Drag and drop your site folder here"**.
+Nếu bạn đã kết nối GitHub với Netlify:
+1. Mọi thay đổi bạn yêu cầu tôi thực hiện sẽ tự động được cập nhật lên trang web chính thức: **[https://jolly-praline-63d345.netlify.app/](https://jolly-praline-63d345.netlify.app/)**
+2. Bạn không cần làm gì thêm, chỉ cần chờ Netlify build xong (thường mất khoảng 1-2 phút).
 
-## Bước 3: Kéo thả và chạy
-1. Quay lại cửa sổ thư mục `dist` mà tôi đã mở (hoặc bạn tự mở).
-2. Kéo cả thư mục `dist` thả vào ô upload trên trang Netlify.
-3. Chờ khoảng 5-10 giây để hệ thống xử lý.
-
-## Bước 4: Hoàn tất
-- Netlify sẽ cung cấp cho bạn một đường link (ví dụ: `https://vibrant-galaxy-123456.netlify.app`).
-- Bạn có thể gửi link này cho bất kỳ ai để họ vào xem trang web của bạn.
-- Bạn cũng có thể đổi tên link cho đẹp hơn trong phần "Site Settings" > "Change site name".
+### Lựa chọn 2: Triển khai thủ công (Netlify Drop)
+Nếu muốn cập nhật bằng tay:
+1. Chạy lệnh `npm run build` trong terminal để cập nhật thư mục `dist`.
+2. Truy cập **[https://app.netlify.com/drop](https://app.netlify.com/drop)**.
+3. Kéo thả thư mục `dist` vào trang web của Netlify.
 
 ---
-**Chúc mừng! Website của bạn đã online toàn cầu.**
+**Trạng thái hiện tại:** Website đã được đồng bộ hóa với GitHub.
+

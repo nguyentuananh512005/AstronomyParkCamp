@@ -7,7 +7,7 @@
     const canvas = document.getElementById('starfield-canvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let W, H, stars = [];
+    let W, H, stars = [], meteors = [];
 
     function resize() {
         W = canvas.width = window.innerWidth;
@@ -32,11 +32,67 @@
         }
     }
 
+    function createMeteor() {
+        const x = Math.random() * W;
+        const y = Math.random() * (H / 2);
+        const length = Math.random() * 100 + 50;
+        const angle = Math.PI / 4; // 45 degrees
+        meteors.push({
+            x, y,
+            targetX: x + length * Math.cos(angle + Math.PI),
+            targetY: y + length * Math.sin(angle + Math.PI),
+            life: 1.0,
+            speed: Math.random() * 5 + 5
+        });
+    }
+
+    function updateMeteors() {
+        if (Math.random() < 0.005) { // Chance per frame to spawn meteor
+            createMeteor();
+        }
+
+        for (let i = meteors.length - 1; i >= 0; i--) {
+            const m = meteors[i];
+            m.life -= 0.015;
+            m.x += m.speed;
+            m.y += m.speed;
+            if (m.life <= 0) {
+                meteors.splice(i, 1);
+            }
+        }
+    }
+
+    function drawMeteors() {
+        meteors.forEach(m => {
+            ctx.beginPath();
+            const grad = ctx.createLinearGradient(m.x, m.y, m.x - 40, m.y - 40);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${m.life})`);
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.moveTo(m.x, m.y);
+            ctx.lineTo(m.x - 40, m.y - 40);
+            ctx.stroke();
+
+            // Glow head
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${m.life})`;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'white';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+    }
+
     let raf;
     let t = 0;
     function draw() {
         ctx.clearRect(0, 0, W, H);
         t += 0.01;
+
+        // Stars
         stars.forEach(s => {
             const flicker = s.opacity + Math.sin(t * s.speed * 100 + s.phase) * 0.25;
             ctx.beginPath();
@@ -46,6 +102,11 @@
             ctx.fill();
         });
         ctx.globalAlpha = 1;
+
+        // Meteors
+        updateMeteors();
+        drawMeteors();
+
         raf = requestAnimationFrame(draw);
     }
 
@@ -211,6 +272,34 @@ form?.addEventListener('submit', function (e) {
     btnSubmit.style.opacity = '0.7';
     btnSubmit.style.pointerEvents = 'none';
 });
+
+/* ===== 9. INTERACTIVE HOVER EFFECTS ===== */
+(function initInteractiveHovers() {
+    const cards = document.querySelectorAll('.exp-card, .feature-item, .accom-card, .testimonial-card, .contact-form-wrapper');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+
+            // Optional tilt effect
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+})();
 
 console.log('%c✦ ASTRO PARK CAMP %c– Loaded Successfully',
     'color:#a78bfa; font-family:monospace; font-weight:bold;',
