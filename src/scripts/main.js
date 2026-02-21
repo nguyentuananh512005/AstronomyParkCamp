@@ -2,83 +2,75 @@
    ASTRO PARK CAMP – Main JavaScript
    ===================================================== */
 
-/* ===== 1. INTERACTIVE ANIME.JS SOLAR SYSTEM ===== */
-(function initInteractiveSolarSystem() {
-    const container = document.querySelector('.solar-system');
-    if (!container) return;
+/* ===== 1. CSS 3D SOLAR SYSTEM CONTROLLER ===== */
+(function initSolarSystemControls() {
+    const solarSystem = document.getElementById('solar-system');
+    const galaxy = document.getElementById('galaxy');
+    const speedSlider = document.getElementById('speed-slider');
+    const speedValue = document.getElementById('speed-value');
+    const planetItems = document.querySelectorAll('.planet-item');
+    const planets = document.querySelectorAll('.planet');
+    const allOrbits = document.querySelectorAll('.orbit');
 
-    const planetData = [
-        { name: 'mercury', dist: 120, size: 10, speed: 3000, color: '#8c8c8c' },
-        { name: 'venus', dist: 180, size: 18, speed: 7000, color: '#e3bb76' },
-        { name: 'earth', dist: 260, size: 20, speed: 12000, color: '#2271b3', glow: 'rgba(34,113,179,0.5)' },
-        { name: 'mars', dist: 340, size: 14, speed: 20000, color: '#e27b58' },
-        { name: 'jupiter', dist: 500, size: 48, speed: 40000, color: '#d39c7e' },
-        { name: 'saturn', dist: 680, size: 40, speed: 70000, color: '#c5ab6e', hasRings: true },
-        { name: 'uranus', dist: 820, size: 28, speed: 100000, color: '#bbe1e4' },
-        { name: 'neptune', dist: 940, size: 28, speed: 150000, color: '#6081ff' }
-    ];
+    if (!solarSystem) return;
 
-    // Inject Planets and Orbits
-    planetData.forEach(p => {
-        const orbit = document.createElement('div');
-        orbit.className = `orbit ${p.name}-orbit`;
-        orbit.style.width = `${p.dist * 2}px`;
-        orbit.style.height = `${p.dist * 2}px`;
+    // Base durations (seconds)
+    const baseDurations = {
+        'mercury-orbit': 3.4, 'venus-orbit': 8.5, 'earth-orbit': 14,
+        'moon-orbit': 1.5, 'mars-orbit': 26, 'jupiter-orbit': 83,
+        'saturn-orbit': 206, 'uranus-orbit': 588, 'neptune-orbit': 1150
+    };
 
-        const pContainer = document.createElement('div');
-        pContainer.className = 'planet-container';
+    let currentSpeed = 1;
 
-        const planet = document.createElement('div');
-        planet.className = `planet ${p.name}`;
-        planet.style.width = `${p.size}px`;
-        planet.style.height = `${p.size}px`;
-        planet.style.backgroundColor = p.color;
-        if (p.glow) planet.style.boxShadow = `0 0 20px ${p.glow}, inset -4px -4px 10px rgba(0,0,0,0.8)`;
-
-        if (p.hasRings) {
-            const rings = document.createElement('div');
-            rings.className = 'saturn-rings';
-            planet.appendChild(rings);
-        }
-
-        pContainer.appendChild(planet);
-        orbit.appendChild(pContainer);
-        container.appendChild(orbit);
-
-        // Individual Rotation
-        anime({
-            targets: orbit,
-            rotateZ: 360,
-            duration: p.speed,
-            easing: 'linear',
-            loop: true
-        });
-    });
-
-    // Navigation and Camera Logic
-    const navButtons = document.querySelectorAll('.planet-nav button');
-
-    function focusOn(targetName) {
-        navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.planet === targetName));
-
-        const isSun = targetName === 'sun';
-        const pInfo = isSun ? null : planetData.find(p => p.name === targetName);
-
-        anime({
-            targets: '.solar-system',
-            rotateX: isSun ? 75 : 80,
-            translateY: isSun ? 0 : pInfo.dist * 1.2,
-            scale: isSun ? 1 : 2.5,
-            duration: 1500,
-            easing: 'easeInOutQuart'
+    function updateSpeeds() {
+        allOrbits.forEach(orbit => {
+            const base = baseDurations[orbit.id];
+            if (base) orbit.style.animationDuration = (base / currentSpeed) + 's';
         });
     }
 
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', () => focusOn(btn.dataset.planet));
-    });
+    if (speedSlider) {
+        speedSlider.addEventListener('input', () => {
+            currentSpeed = parseFloat(speedSlider.value);
+            speedValue.textContent = currentSpeed.toFixed(1) + 'x';
+            updateSpeeds();
+        });
+    }
 
+    // Focus/Zoom targets (translateY moves along the tilted axis)
+    const focusTargets = {
+        sun: { scale: 1, translateY: 0 },
+        mercury: { scale: 12, translateY: -90 },
+        venus: { scale: 8, translateY: -137 },
+        earth: { scale: 6, translateY: -195 },
+        mars: { scale: 5, translateY: -265 },
+        jupiter: { scale: 3, translateY: -390 },
+        saturn: { scale: 2.3, translateY: -500 },
+        uranus: { scale: 2, translateY: -590 },
+        neptune: { scale: 1.8, translateY: -665 }
+    };
+
+    function focusPlanet(name) {
+        planetItems.forEach(item => item.classList.toggle('active', item.dataset.planet === name));
+        planets.forEach(p => p.classList.remove('selected'));
+        if (name !== 'sun') {
+            const el = document.getElementById(name);
+            if (el) el.classList.add('selected');
+        }
+        const t = focusTargets[name] || focusTargets.sun;
+        if (galaxy) {
+            galaxy.style.transition = 'transform 1.2s cubic-bezier(0.45,0.05,0.55,0.95)';
+            galaxy.style.transform = `translate(calc(-50% + 0px), calc(-50% + ${t.translateY}px)) scale(${t.scale})`;
+        }
+    }
+
+    planetItems.forEach(item => item.addEventListener('click', () => focusPlanet(item.dataset.planet)));
+    planets.forEach(planet => planet.addEventListener('click', e => { e.stopPropagation(); focusPlanet(planet.id); }));
+    document.getElementById('universe')?.addEventListener('click', () => focusPlanet('sun'));
 })();
+
+
 
 /* ===== 2. ORBIT CANVAS (Testimonial background) ===== */
 (function initOrbit() {
