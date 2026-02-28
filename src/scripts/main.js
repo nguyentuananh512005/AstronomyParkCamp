@@ -220,6 +220,42 @@ revealEls.forEach(el => {
     startAutoplay();
 })();
 
+/* ===== 7.1 INSTRUCTOR CAROUSEL ===== */
+(function initInstructors() {
+    const cards = document.querySelectorAll('.instructor-card');
+    const dots = document.querySelectorAll('.ins-dot');
+    let current = 0;
+    let autoplay;
+
+    if (!cards.length) return;
+
+    function goTo(idx) {
+        cards[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = idx;
+        cards[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function next() {
+        goTo((current + 1) % cards.length);
+    }
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            clearInterval(autoplay);
+            goTo(i);
+            startAutoplay();
+        });
+    });
+
+    function startAutoplay() {
+        autoplay = setInterval(next, 6000);
+    }
+
+    startAutoplay();
+})();
+
 /* ===== 8. FORM SUBMIT FEEDBACK ===== */
 const form = document.getElementById('booking-form');
 const btnSubmit = document.getElementById('btn-submit');

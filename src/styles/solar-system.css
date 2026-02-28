@@ -863,7 +863,7 @@ body {
 /* --------------------------------------------------------------------------- text infos data */
 /* --------------------------------------------------------------------------- speed */
 .set-speed dl.infos dd span:after {
-    content: 'Orbit Velocity';
+    content: 'Vận tốc Quỹ đạo';
 }
 
 .set-speed #sun dl.infos dd:after {
@@ -904,7 +904,7 @@ body {
 
 /* --------------------------------------------------------------------------- size */
 .set-size dl.infos dd span:after {
-    content: 'Equatorial Circumference';
+    content: 'Chu vi Xích đạo';
 }
 
 .set-size #sun dl.infos dd:after {
@@ -945,11 +945,11 @@ body {
 
 /* --------------------------------------------------------------------------- distance */
 .set-distance dl.infos dd span:after {
-    content: 'From Sun';
+    content: 'Từ Mặt trời';
 }
 
 .set-distance #sun dl.infos dd span:after {
-    content: 'From Earth';
+    content: 'Từ Trái đất';
 }
 
 .set-distance #sun dl.infos dd:after {
