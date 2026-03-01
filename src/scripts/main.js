@@ -259,57 +259,75 @@ revealEls.forEach(el => {
 /* ===== 7.2 ACCOMMODATION CAROUSEL (NEW) ===== */
 (function initAccomCarousel() {
     const wrapper = document.getElementById('accom-wrapper');
-    const dots = document.querySelectorAll('.acc-dot');
+    const dotsContainer = document.getElementById('accom-dots');
     let current = 0;
     let autoplay;
 
-    if (!wrapper || !dots.length) return;
+    if (!wrapper || !dotsContainer) return;
+
+    function renderDots() {
+        const totalCards = wrapper.querySelectorAll('.accom-card').length;
+        const card = wrapper.querySelector('.accom-card');
+        if (!card) return;
+
+        const cardWidth = card.offsetWidth;
+        const gap = 24; // translate to 1.5rem gap (16 * 1.5 = 24)
+        const containerWidth = wrapper.parentElement.offsetWidth;
+        const visibleCardsCount = Math.floor((containerWidth + gap) / (cardWidth + gap)) || 1;
+
+        const numDots = Math.max(1, totalCards - visibleCardsCount + 1);
+
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < numDots; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'acc-dot' + (i === current ? ' active' : '');
+            dot.dataset.index = i;
+            dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+            dotsContainer.appendChild(dot);
+
+            dot.addEventListener('click', () => {
+                clearInterval(autoplay);
+                goTo(i);
+                startAutoplay();
+            });
+        }
+
+        // Ensure current is within bounds after resize
+        if (current >= numDots) {
+            current = numDots - 1;
+        }
+        goTo(current);
+    }
 
     function goTo(idx) {
-        dots[current].classList.remove('active');
+        const dots = dotsContainer.querySelectorAll('.acc-dot');
+        if (dots.length === 0) return;
+
+        dots.forEach(d => d.classList.remove('active'));
         current = idx;
-        dots[current].classList.add('active');
+        if (dots[current]) dots[current].classList.add('active');
 
         const card = wrapper.querySelector('.accom-card');
         if (!card) return;
 
         const cardWidth = card.offsetWidth;
         const gap = 24;
-        const totalCards = wrapper.querySelectorAll('.accom-card').length;
-        const containerWidth = wrapper.parentElement.offsetWidth;
-        const visibleCards = Math.round(containerWidth / (cardWidth + gap)) || 1;
-
-        // Nếu là dot cuối cùng, trượt đến cuối danh sách
-        let shiftIndex = idx;
-        if (idx === dots.length - 1 && dots.length > 1) {
-            shiftIndex = Math.max(0, totalCards - visibleCards);
-        }
-
-        wrapper.style.transform = `translateX(-${shiftIndex * (cardWidth + gap)}px)`;
+        wrapper.style.transform = `translateX(-${current * (cardWidth + gap)}px)`;
     }
 
     function next() {
+        const dots = dotsContainer.querySelectorAll('.acc-dot');
+        if (dots.length <= 1) return;
         goTo((current + 1) % dots.length);
     }
 
-    dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => {
-            clearInterval(autoplay);
-            goTo(i);
-            autoplay = setInterval(next, 5000);
-        });
-    });
-
     function startAutoplay() {
+        clearInterval(autoplay);
         autoplay = setInterval(next, 5000);
     }
 
-    // Xử lý khi resize cửa sổ để tính toán lại vị trí
-    window.addEventListener('resize', () => {
-        const card = wrapper.querySelector('.accom-card');
-        if (card) goTo(current);
-    });
-
+    window.addEventListener('resize', renderDots);
+    renderDots();
     startAutoplay();
 })();
 
