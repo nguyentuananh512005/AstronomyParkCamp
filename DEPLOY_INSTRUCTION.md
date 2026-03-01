@@ -24,4 +24,22 @@ Nếu bạn đã kết nối GitHub với Netlify:
 2. Bạn chỉ cần chờ Netlify build xong (thường mất khoảng 1 phút).
 
 ---
-**Trạng thái hiện tại:** Website đã được đồng bộ hóa hoàn toàn với hệ mặt trời 3D mượt mà.
+**Trạng thái hiện tại:** Website đã được đồng bộ hóa hoàn toàn với hệ mặt trời 3D và các phần Chỗ nghỉ/Giảng viên đã được tối ưu hóa mượt mà.
+
+## 💾 Kí ức & Lưu ý quan trọng (Cập nhật 28/02/2026)
+
+### ⚠️ QUY TRÌNH ĐẨY CODE (CRITICAL)
+- **TUYỆT ĐỐI CHƯA ĐẨY CODE LÊN GITHUB** (Git Push) nếu chưa nhận được lệnh trực tiếp từ người dùng. Mọi thay đổi hiện tại chỉ được lưu và chạy ở môi trường local.
+
+### 🚀 Cập nhật quan trọng (Ngày 01/03/2026 - 00:05)
+
+**Những thay đổi lớn vừa thực hiện:**
+- **TikTok & Trải Nghiệm**: Loại bỏ lưới thẻ cũ, nhúng trực tiếp video TikTok làm điểm nhấn. Đã xóa các dòng mô tả phụ để tập trung vào video.
+- **Bộ đếm ngược & Zalo**: Thay thế form đăng ký phức tạp bằng ảnh minh họa (`8_jpeg.jpg`) và **nút Đăng Ký Zalo**. Tích hợp bộ đếm ngược 24h; khi hết giờ nút sẽ tự động bị vô hiệu hóa và đổi màu.
+- **Tối ưu hóa Hero (Cực Sạch)**:
+    - Loại bỏ hoàn toàn khung nền chữ, chỉ giữ lại tiêu đề trên nền sao.
+    - Đẩy tiêu đề lên cao và sang trái, thu nhỏ hệ mặt trời (`45%`) để **tuyệt đối không có thành phần nào che khuất hệ mặt trời**.
+    - Xóa nút "Khám phá" và mô tả phụ để mang lại cảm giác điện ảnh (Cinematic).
+- **Thu gọn Menu**: Xóa mục "Đài Quan Sát" để menu tinh gọn hơn.
+- **Tính năng UI**: Giảm cường độ hiệu ứng nghiêng (Tilt) ở phần Contact để người dùng không bị "chóng mặt".
+- **Features Carousel**: Chuyển sang dạng cuộn dọc (Vertical Scroll) thay vì trượt ngang.

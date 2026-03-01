@@ -256,6 +256,153 @@ revealEls.forEach(el => {
     startAutoplay();
 })();
 
+/* ===== 7.2 ACCOMMODATION CAROUSEL (NEW) ===== */
+(function initAccomCarousel() {
+    const wrapper = document.getElementById('accom-wrapper');
+    const dots = document.querySelectorAll('.acc-dot');
+    let current = 0;
+    let autoplay;
+
+    if (!wrapper || !dots.length) return;
+
+    function goTo(idx) {
+        dots[current].classList.remove('active');
+        current = idx;
+        dots[current].classList.add('active');
+
+        const card = wrapper.querySelector('.accom-card');
+        if (!card) return;
+
+        const cardWidth = card.offsetWidth;
+        const gap = 24;
+        const totalCards = wrapper.querySelectorAll('.accom-card').length;
+        const containerWidth = wrapper.parentElement.offsetWidth;
+        const visibleCards = Math.round(containerWidth / (cardWidth + gap)) || 1;
+
+        // Nếu là dot cuối cùng, trượt đến cuối danh sách
+        let shiftIndex = idx;
+        if (idx === dots.length - 1 && dots.length > 1) {
+            shiftIndex = Math.max(0, totalCards - visibleCards);
+        }
+
+        wrapper.style.transform = `translateX(-${shiftIndex * (cardWidth + gap)}px)`;
+    }
+
+    function next() {
+        goTo((current + 1) % dots.length);
+    }
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            clearInterval(autoplay);
+            goTo(i);
+            autoplay = setInterval(next, 5000);
+        });
+    });
+
+    function startAutoplay() {
+        autoplay = setInterval(next, 5000);
+    }
+
+    // Xử lý khi resize cửa sổ để tính toán lại vị trí
+    window.addEventListener('resize', () => {
+        const card = wrapper.querySelector('.accom-card');
+        if (card) goTo(current);
+    });
+
+    startAutoplay();
+})();
+
+/* ===== 7.3 FEATURES CAROUSEL (NEW) ===== */
+(function initFeaturesCarousel() {
+    const list = document.getElementById('features-list');
+    const container = document.querySelector('.features-carousel-container');
+    const dots = document.querySelectorAll('.feat-dot');
+    let current = 0;
+    let autoplay;
+
+    if (!list || !container || !dots.length) return;
+
+    function goTo(idx) {
+        if (idx < 0 || idx >= dots.length) return;
+
+        current = idx;
+        const items = list.querySelectorAll('.feature-item');
+        if (!items.length) return;
+
+        const maxScroll = container.scrollHeight - container.clientHeight;
+
+        // Tính toán vị trí cuộn dựa trên dấu chấm (theo chiều dọc)
+        let scrollY = 0;
+        if (dots.length > 1) {
+            scrollY = idx * (maxScroll / (dots.length - 1));
+        }
+
+        container.scrollTo({
+            top: scrollY,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Cập nhật trạng thái dấu chấm khi người dùng kéo thanh trượt thủ công
+    container.addEventListener('scroll', () => {
+        const maxScroll = container.scrollHeight - container.clientHeight;
+        if (maxScroll <= 0) return;
+
+        const scrollProgress = container.scrollTop / maxScroll;
+        const activeIdx = Math.round(scrollProgress * (dots.length - 1));
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === activeIdx);
+        });
+        current = activeIdx;
+    });
+
+    function next() {
+        goTo((current + 1) % dots.length);
+    }
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearInterval(autoplay);
+            goTo(i);
+            autoplay = setInterval(next, 7000);
+        });
+    });
+
+    const btnPrev = document.getElementById('feat-prev');
+    const btnNext = document.getElementById('feat-next');
+
+    btnPrev?.addEventListener('click', () => {
+        clearInterval(autoplay);
+        const item = list.querySelector('.feature-item');
+        const scrollAmount = item ? item.offsetHeight + 20 : 300;
+        container.scrollBy({ top: -scrollAmount, left: 0, behavior: 'smooth' });
+        autoplay = setInterval(next, 7000);
+    });
+
+    btnNext?.addEventListener('click', () => {
+        clearInterval(autoplay);
+        const item = list.querySelector('.feature-item');
+        const scrollAmount = item ? item.offsetHeight + 20 : 300;
+        container.scrollBy({ top: scrollAmount, left: 0, behavior: 'smooth' });
+        autoplay = setInterval(next, 7000);
+    });
+
+    function startAutoplay() {
+        autoplay = setInterval(next, 10000);
+    }
+
+    window.addEventListener('resize', () => {
+        // Cập nhật lại vị trí khi đổi kích thước màn hình
+        goTo(current);
+    });
+
+    startAutoplay();
+})();
+
 /* ===== 8. FORM SUBMIT FEEDBACK ===== */
 const form = document.getElementById('booking-form');
 const btnSubmit = document.getElementById('btn-submit');
@@ -282,8 +429,12 @@ form?.addEventListener('submit', function (e) {
             // Optional tilt effect
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
+
+            // Giảm cường độ tilt cho các khối 'tilt-mild'
+            const tiltIntensity = card.classList.contains('tilt-mild') ? 60 : 20;
+
+            const rotateX = (y - centerY) / tiltIntensity;
+            const rotateY = (centerX - x) / tiltIntensity;
 
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
         });
@@ -292,6 +443,145 @@ form?.addEventListener('submit', function (e) {
             card.style.transform = '';
         });
     });
+})();
+
+/* ===== 10. REGISTRATION COUNTDOWN ===== */
+(function initRegistrationCountdown() {
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const registerBtn = document.getElementById('btn-register-now');
+
+    if (!daysEl || !registerBtn) return;
+
+    // Để bộ đếm chạy "thời gian thực" và đồng nhất cho tất cả mọi người trên Netlify,
+    // ta nên đặt một mốc thời gian cố định. 
+    // TEST: Đặt một ngày trong quá khứ để kiểm tra thông báo hết hạn
+    const countdownDate = new Date("2024-01-01T00:00:00").getTime();
+
+    let isExpired = false;
+
+    const x = setInterval(function () {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
+
+        const days = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+        const hours = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+        const minutes = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+        const seconds = Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
+
+        daysEl.innerHTML = days < 10 ? '0' + days : days;
+        hoursEl.innerHTML = hours < 10 ? '0' + hours : hours;
+        minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
+        secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
+
+        if (distance < 0 && !isExpired) {
+            isExpired = true;
+            clearInterval(x);
+            daysEl.innerHTML = "00";
+            hoursEl.innerHTML = "00";
+            minutesEl.innerHTML = "00";
+            secondsEl.innerHTML = "00";
+
+            // Cập nhật giao diện nút khi hết hạn
+            registerBtn.style.opacity = '0.6';
+            registerBtn.style.filter = 'grayscale(0.8)';
+            registerBtn.querySelector('span').innerHTML = 'Đã Hết Hạn Đăng Ký';
+        }
+    }, 1000);
+
+    // Hàm tạo mặt buồn từ những ngôi sao
+    function generateStarSadFace() {
+        const container = document.getElementById('star-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const centerX = 100, centerY = 100, radius = 80;
+
+        // Vẽ vòng tròn khuôn mặt (tối giản)
+        for (let i = 0; i < 20; i++) {
+            const angle = (i / 20) * Math.PI * 2;
+            createStar(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle), container, i * 0.1);
+        }
+        // Hai mắt
+        createStar(centerX - 30, centerY - 20, container, 0.5);
+        createStar(centerX + 30, centerY - 20, container, 0.8);
+
+        // Miệng buồn (cung ngược)
+        for (let i = 0; i < 10; i++) {
+            const angle = Math.PI + (i / 9) * Math.PI * 0.6 + 0.6;
+            createStar(centerX + 50 * Math.cos(angle), (centerY + 45) + 30 * Math.sin(angle), container, i * 0.15);
+        }
+    }
+
+    function createStar(x, y, parent, delay) {
+        const star = document.createElement('div');
+        star.className = 'star-point';
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        star.style.animationDelay = delay + 's';
+        parent.appendChild(star);
+    }
+
+    const modal = document.getElementById('expired-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
+
+    // Xử lý sự kiện click khi hết hạn
+    registerBtn.addEventListener('click', function (e) {
+        const now = new Date().getTime();
+        if (countdownDate - now < 0) {
+            e.preventDefault();
+            generateStarSadFace();
+            modal.classList.add('active');
+        }
+    });
+
+    closeBtn?.addEventListener('click', () => modal.classList.remove('active'));
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    /* ===== 11. ABOUT CAROUSEL (IMAGES 10-32) ===== */
+    (function initAboutCarousel() {
+        const inner = document.getElementById('about-carousel-inner');
+        const prev = document.getElementById('prev-about-img');
+        const next = document.getElementById('next-about-img');
+        const counter = document.getElementById('about-img-counter');
+        const images = inner?.querySelectorAll('img');
+
+        if (!inner || !images || images.length === 0) return;
+
+        let currentIndex = 0;
+        const total = images.length;
+
+        function updateCarousel() {
+            inner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            if (counter) counter.innerText = `${currentIndex + 1}/${total}`;
+        }
+
+        prev?.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentIndex = (currentIndex - 1 + total) % total;
+            updateCarousel();
+        });
+
+        next?.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentIndex = (currentIndex + 1) % total;
+            updateCarousel();
+        });
+
+        // Tự động chuyển ảnh sau 4 giây
+        let autoPlay = setInterval(() => {
+            currentIndex = (currentIndex + 1) % total;
+            updateCarousel();
+        }, 4000);
+
+        // Dừng tự động khi người dùng tương tác
+        const stopAuto = () => clearInterval(autoPlay);
+        prev?.addEventListener('mousedown', stopAuto);
+        next?.addEventListener('mousedown', stopAuto);
+    })();
 })();
 
 console.log('%c✦ ASTRO PARK CAMP %c– Loaded Successfully',
